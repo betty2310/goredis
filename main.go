@@ -41,6 +41,7 @@ func main() {
 func handleConnection(conn net.Conn) {
 	buffer := make([]byte, 1024)
 	command := make([]byte, 0, 128)
+	kv := make(map[string]string, 0)
 	for {
 		n, err := conn.Read(buffer)
 		if err != nil {
@@ -57,7 +58,7 @@ func handleConnection(conn net.Conn) {
 				}
 			case CARET_KEY:
 			case NEW_LINE_KEY:
-				com.ProcessCommand(conn, string(command))
+				com.ProcessCommand(conn, string(command), kv)
 				command = command[:0]
 			case CTRL_C_KEY:
 				conn.Write([]byte("+Ok Goodbye\r\n"))

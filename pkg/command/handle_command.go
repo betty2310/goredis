@@ -5,7 +5,7 @@ import (
 	"net"
 )
 
-func ProcessCommand(conn net.Conn, command string) {
+func ProcessCommand(conn net.Conn, command string, kv map[string]string) {
 	fmt.Printf("Processing command: %v\n", command)
 	args := SplitArguments(command)
 	switch args[0] {
@@ -17,6 +17,17 @@ func ProcessCommand(conn net.Conn, command string) {
 	case "echo":
 		conn.Write([]byte(args[1]))
 		conn.Write([]byte("\r\n"))
+	case "set":
+		kv[args[1]] = args[2]
+		conn.Write([]byte("+OK\r\n"))
+	case "get":
+		val, ok := kv[args[1]]
+		if !ok {
+			conn.Write([]byte("-1\r\n"))
+		} else {
+			conn.Write([]byte(val))
+			conn.Write([]byte("\r\n"))
+		}
 	default:
 		conn.Write([]byte("-ERR unknown command '" + command + "'\r\n"))
 	}

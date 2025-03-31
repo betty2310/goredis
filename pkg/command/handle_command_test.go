@@ -25,3 +25,27 @@ func TestEchoHelloWithQuotationCommand(t *testing.T) {
 		t.Errorf(`command '%v' should return command %v and arg %v. But return %v and %v, also the length is %v`, command, "echo", "hello world", args[0], args[1], len(args))
 	}
 }
+
+func TestSetStringCommand(t *testing.T) {
+	command := `set name huynh`
+	args := SplitArguments(command)
+	if args[0] != "set" || args[1] != "name" || args[2] != "huynh" {
+		t.Errorf(`command '%v' should return command %v with key %v and value %v. But return %v`, command, "set", "name", "huynh", args)
+	}
+}
+
+func TestSetStringNotTrimCommand(t *testing.T) {
+	command := `set name huynh`
+	args := SplitArguments(command)
+	if args[0] != "set" || args[1] != "name" || args[2] != "huynh" {
+		t.Errorf(`command '%v' should return command %v with key %v and value %v. But return %v`, command, "set", "name", "huynh", args)
+	}
+}
+
+func TestGetCommand(t *testing.T) {
+	command := `get name`
+	args := SplitArguments(command)
+	if args[0] != "get" || args[1] != "name" {
+		t.Errorf(`command '%v' should return command %v with key %v. But return %v`, command, "get", "name", args)
+	}
+}
