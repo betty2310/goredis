@@ -1,6 +1,9 @@
 package command
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func TestPingCommand(t *testing.T) {
 	command := "ping"
@@ -47,5 +50,23 @@ func TestGetCommand(t *testing.T) {
 	args := SplitArguments(command)
 	if args[0] != "get" || args[1] != "name" {
 		t.Errorf(`command '%v' should return command %v with key %v. But return %v`, command, "get", "name", args)
+	}
+}
+
+func TestSetStringHaveExpInSecondCommand(t *testing.T) {
+	command := `set name huynh EXP 3s`
+	args := SplitArguments(command)
+
+	if args[0] != "set" || args[1] != "name" || args[2] != "huynh" || args[3] != "EXP" || args[4] != "3s" {
+		t.Errorf(`string '%v' should return command %v with key %v and value %v have exp date is %v. But return %v`, command, "set", "name", "huynh", args, args[4])
+	}
+
+	minutes, err := time.ParseDuration(args[4])
+	if err != nil {
+		t.Errorf(`Cannot parse %v to datetime`, args[4])
+	}
+	threeMinutes := 3 * time.Second
+	if minutes != threeMinutes {
+		t.Errorf(`Exp %v return wrong time`, args[4])
 	}
 }

@@ -6,6 +6,7 @@ import (
 	"os"
 
 	com "github.com/betty2310/redigo/pkg/command"
+	datatypes "github.com/betty2310/redigo/pkg/data-types"
 )
 
 const (
@@ -41,7 +42,7 @@ func main() {
 func handleConnection(conn net.Conn) {
 	buffer := make([]byte, 1024)
 	command := make([]byte, 0, 128)
-	kv := make(map[string]string, 0)
+	kv := make(map[string]datatypes.RedisValue, 0)
 	for {
 		n, err := conn.Read(buffer)
 		if err != nil {
